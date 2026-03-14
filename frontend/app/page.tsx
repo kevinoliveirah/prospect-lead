@@ -43,30 +43,36 @@ const SAMPLE_LEADS = [
   }
 ];
 
-const FEATURES = [
+const FEATURES_EXTENDED = [
   {
-    title: "Dados públicos enriquecidos",
-    text: "Cruza fontes públicas e domínios para completar telefone, e-mail e social quando disponível."
+    title: "Dados enriquecidos",
+    text: "Fontes públicas completam telefone, e-mail e social.",
+    icon: <Cloud className="text-[var(--accent)]" size={20} />
   },
   {
-    title: "Filtros por bairro e raio",
-    text: "Direcione a busca por cidade, bairro ou KM para refinar a prospecção."
+    title: "Filtros precisos",
+    text: "Busca por bairro ou KM para refinar a prospecção.",
+    icon: <Filter className="text-[var(--accent)]" size={20} />
   },
   {
-    title: "Exportação pronta",
-    text: "CSV limpo para importar no CRM sem retrabalho."
+    title: "Exportação CSV",
+    text: "Pronto para importar no seu CRM sem retrabalho.",
+    icon: <Download className="text-[var(--accent)]" size={20} />
   },
   {
     title: "Fluxo integrado",
-    text: "Mapa, pipeline e notas em um só lugar para manter o time alinhado."
+    text: "Mapa e pipeline em um só lugar para o seu time.",
+    icon: <Users className="text-[var(--accent)]" size={20} />
   },
   {
-    title: "Validação básica",
-    text: "Checagens rápidas para reduzir dados incompletos."
+    title: "Validação",
+    text: "Redução de dados incompletos em tempo real.",
+    icon: <CheckCircle className="text-[var(--accent)]" size={20} />
   },
   {
-    title: "Métricas claras",
-    text: "Acompanhe volume por segmento e priorize o que dá retorno."
+    title: "Métricas",
+    text: "Visualize o retorno por segmento e localidade.",
+    icon: <SlidersHorizontal className="text-[var(--accent)]" size={20} />
   }
 ];
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import type { Company } from "../lib/types";
 import { useGoogleMaps } from "./GoogleMapsProvider";
