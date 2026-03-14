@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useAuth } from "../../../components/AuthProvider";
 import { apiFetch } from "../../../lib/api";
 import type { User } from "../../../lib/types";
+import Image from "next/image";
 
 type RegisterResponse = {
   user: User;
@@ -84,9 +85,19 @@ export default function RegisterPage() {
               ← Voltar ao inicio
             </Link>
           </div>
-          <h1 className="text-2xl font-bold text-white text-center">
-            Criar conta no Prospect Lead
-          </h1>
+          <div className="flex flex-col items-center gap-4 mb-6">
+            <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-2 shadow-sm">
+              <Image
+                src="/logo.png"
+                alt="Prospect Lead Logo"
+                fill
+                className="object-contain p-2"
+              />
+            </div>
+            <h1 className="text-2xl font-bold text-white text-center">
+              Criar conta no Prospect Lead
+            </h1>
+          </div>
           
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">

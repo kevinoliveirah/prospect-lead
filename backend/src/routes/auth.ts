@@ -34,14 +34,14 @@ router.post("/register", async (req, res, next) => {
 
     const passwordHash = await bcrypt.hash(data.password, 10);
     const id = crypto.randomUUID();
-    const result = await pool.query(
+    const regResult = await pool.query(
       `INSERT INTO users (id, name, email, password_hash, company)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id, name, email, company, created_at`,
       [id, data.name, data.email, passwordHash, data.company ?? null]
     );
 
-    const user = result.rows[0];
+    const user = regResult.rows[0];
     if (!user) {
       console.log(`[AUTH] Registration failed: No user returned after insert for email ${data.email}`);
       return res.status(500).json({ error: "internal_server_error" });

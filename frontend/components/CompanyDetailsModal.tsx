@@ -1,6 +1,7 @@
 "use client";
 
 import { Company, SocialLinks } from "../lib/types";
+import { X, Phone, Globe, MapPin, ClipboardList, TrendingUp, Star, Save, MessageCircle, Instagram, Facebook, Linkedin, Youtube, Music2, Pin, Twitter } from "lucide-react";
 
 interface CompanyDetailsModalProps {
   company: Company | null;
@@ -10,15 +11,15 @@ interface CompanyDetailsModalProps {
   detailsError?: string | null;
 }
 
-const SOCIAL_CONFIG: Array<{ key: keyof SocialLinks; label: string; icon: string; color: string }> = [
-  { key: 'whatsapp',  label: 'WhatsApp',  icon: '💬', color: 'text-green-400 hover:text-green-300' },
-  { key: 'instagram', label: 'Instagram', icon: '📷', color: 'text-pink-400 hover:text-pink-300' },
-  { key: 'facebook',  label: 'Facebook',  icon: '👍', color: 'text-blue-400 hover:text-blue-300' },
-  { key: 'linkedin',  label: 'LinkedIn',  icon: '💼', color: 'text-sky-400 hover:text-sky-300' },
-  { key: 'youtube',   label: 'YouTube',   icon: '▶️', color: 'text-red-400 hover:text-red-300' },
-  { key: 'tiktok',    label: 'TikTok',    icon: '🎵', color: 'text-white hover:text-gray-300' },
-  { key: 'pinterest', label: 'Pinterest', icon: '📌', color: 'text-red-300 hover:text-red-200' },
-  { key: 'twitter',   label: 'Twitter/X', icon: '🐦', color: 'text-sky-300 hover:text-sky-200' },
+const SOCIAL_CONFIG: Array<{ key: keyof SocialLinks; label: string; icon: any; color: string }> = [
+  { key: 'whatsapp',  label: 'WhatsApp',  icon: MessageCircle, color: 'text-green-400 hover:text-green-300' },
+  { key: 'instagram', label: 'Instagram', icon: Instagram, color: 'text-pink-400 hover:text-pink-300' },
+  { key: 'facebook',  label: 'Facebook',  icon: Facebook, color: 'text-blue-400 hover:text-blue-300' },
+  { key: 'linkedin',  label: 'LinkedIn',  icon: Linkedin, color: 'text-sky-400 hover:text-sky-300' },
+  { key: 'youtube',   label: 'YouTube',   icon: Youtube, color: 'text-red-400 hover:text-red-300' },
+  { key: 'tiktok',    label: 'TikTok',    icon: Music2, color: 'text-white hover:text-gray-300' },
+  { key: 'pinterest', label: 'Pinterest', icon: Pin, color: 'text-red-300 hover:text-red-200' },
+  { key: 'twitter',   label: 'Twitter/X', icon: Twitter, color: 'text-sky-300 hover:text-sky-200' },
 ];
 
 export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, detailsError }: CompanyDetailsModalProps) {
@@ -63,7 +64,7 @@ export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, 
               className="rounded-full bg-white/5 p-2 text-[var(--ink-muted)] hover:bg-white/10 hover:text-white transition-all shadow-sm flex-shrink-0"
               title="Fechar"
             >
-              ✕
+              <X size={20} />
             </button>
           </div>
         </div>
@@ -77,10 +78,15 @@ export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, 
           )}
           {/* Contact */}
           <section>
-            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--ink-muted)]">📋 Contato</h4>
+            <h4 className="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--ink-muted)]">
+              <ClipboardList size={14} className="text-[var(--accent)]" /> 
+              Contato
+            </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-3 rounded-2xl bg-white/5 p-4 border border-white/5">
-                <span className="text-2xl">📞</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-[var(--accent)] shadow-sm">
+                  <Phone size={20} />
+                </span>
                 <div>
                   <p className="text-[10px] text-[var(--ink-muted)] uppercase tracking-widest">Telefone</p>
                   {company.phone ? (
@@ -92,7 +98,9 @@ export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, 
               </div>
 
               <div className="flex items-center gap-3 rounded-2xl bg-white/5 p-4 border border-white/5">
-                <span className="text-2xl">🌐</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-[var(--accent)] shadow-sm">
+                  <Globe size={20} />
+                </span>
                 <div className="min-w-0">
                   <p className="text-[10px] text-[var(--ink-muted)] uppercase tracking-widest">Website</p>
                   {company.website ? (
@@ -108,7 +116,9 @@ export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, 
               </div>
 
               <div className="flex items-center gap-3 rounded-2xl bg-white/5 p-4 border border-white/5 md:col-span-2">
-                <span className="text-2xl">📍</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-[var(--accent)] shadow-sm">
+                  <MapPin size={20} />
+                </span>
                 <div>
                   <p className="text-[10px] text-[var(--ink-muted)] uppercase tracking-widest">Endereço</p>
                   <p className="text-white text-sm leading-relaxed">{company.address || company.city || 'Não informado'}</p>
@@ -120,9 +130,12 @@ export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, 
           {/* Social Media */}
           {hasSocial && (
             <section>
-              <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--ink-muted)]">📱 Redes Sociais</h4>
+              <h4 className="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--ink-muted)]">
+                <MessageCircle size={14} className="text-[var(--accent)]" />
+                Redes Sociais
+              </h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {SOCIAL_CONFIG.map(({ key, label, icon, color }) => {
+                {SOCIAL_CONFIG.map(({ key, label, icon: Icon, color }) => {
                   const url = company.social?.[key];
                   if (!url) return null;
                   return (
@@ -133,7 +146,7 @@ export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, 
                       rel="noopener noreferrer"
                       className={`flex flex-col items-center gap-2 rounded-2xl bg-white/5 border border-white/5 p-4 transition-all hover:bg-white/10 hover:scale-[1.02] ${color}`}
                     >
-                      <span className="text-2xl">{icon}</span>
+                      <Icon size={24} />
                       <span className="text-[10px] font-bold uppercase tracking-wider">{label}</span>
                     </a>
                   );
@@ -150,7 +163,10 @@ export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, 
 
           {/* Market intel */}
           <section>
-            <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--ink-muted)]">📊 Inteligência de Mercado</h4>
+            <h4 className="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--ink-muted)]">
+              <TrendingUp size={14} className="text-[var(--accent)]" />
+              Inteligência de Mercado
+            </h4>
             <div className="rounded-2xl bg-white/5 border border-white/5 p-5 grid grid-cols-2 gap-4">
               <div>
                 <p className="text-[10px] text-[var(--ink-muted)] uppercase tracking-widest mb-1">Faturamento Estimado</p>
@@ -159,7 +175,10 @@ export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, 
               {company.rating && (
                 <div>
                   <p className="text-[10px] text-[var(--ink-muted)] uppercase tracking-widest mb-1">Avaliação Google</p>
-                  <p className="text-base font-bold text-amber-400">★ {company.rating.toFixed(1)}</p>
+                  <p className="flex items-center gap-1.5 text-base font-bold text-amber-400">
+                    <Star size={16} fill="currentColor" />
+                    {company.rating.toFixed(1)}
+                  </p>
                 </div>
               )}
             </div>
@@ -179,7 +198,8 @@ export function CompanyDetailsModal({ company, onClose, onSave, loadingDetails, 
               onClick={() => { onSave(company); onClose(); }}
               className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-[var(--accent)]/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
-              📂 Salvar como Lead
+              <Save size={18} />
+              Salvar como Lead
             </button>
           )}
         </div>

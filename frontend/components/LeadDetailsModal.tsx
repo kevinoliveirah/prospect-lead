@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Lead } from "../lib/types";
+import { X, Phone, Mail, MessageCircle, Calendar, Clock, Trash2 } from "lucide-react";
 
 interface LeadDetailsModalProps {
   lead: Lead | null;
@@ -70,7 +71,7 @@ export function LeadDetailsModal({ lead, onClose, onStatusChange, onDelete }: Le
               className="rounded-full bg-white/5 p-2 text-[var(--ink-muted)] hover:bg-white/10 hover:text-white transition-all shadow-sm flex-shrink-0"
               title="Fechar"
             >
-              ✕
+              <X size={20} />
             </button>
           </div>
         </div>
@@ -90,15 +91,18 @@ export function LeadDetailsModal({ lead, onClose, onStatusChange, onDelete }: Le
                         const waUrl = `https://wa.me/55${waNumber.startsWith('55') ? waNumber.slice(2) : waNumber}?text=${encodeURIComponent(approachMessage)}`;
                         window.open(waUrl, '_blank');
                       }}
-                      className="text-[10px] font-bold uppercase tracking-widest text-green-400 hover:text-green-300 transition"
+                      className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-green-400 hover:text-green-300 transition"
                     >
-                      Enviar WhatsApp 💬
+                      <MessageCircle size={14} />
+                      Enviar WhatsApp
                     </button>
                   )}
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-lg shadow-sm">📞</span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-[var(--accent)] shadow-sm">
+                      <Phone size={20} />
+                    </span>
                     <div>
                       <p className="text-[10px] text-[var(--ink-muted)] uppercase tracking-widest">Telefone</p>
                       {lead.phone ? (
@@ -115,7 +119,9 @@ export function LeadDetailsModal({ lead, onClose, onStatusChange, onDelete }: Le
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-lg shadow-sm">📧</span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-[var(--accent)] shadow-sm">
+                      <Mail size={20} />
+                    </span>
                     <div>
                       <p className="text-[10px] text-[var(--ink-muted)] uppercase tracking-widest">Email</p>
                       {lead.email ? (
@@ -200,11 +206,17 @@ export function LeadDetailsModal({ lead, onClose, onStatusChange, onDelete }: Le
                 <h4 className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[var(--ink-muted)]">Datas</h4>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between">
-                    <span className="text-[var(--ink-muted)]">Criado em</span>
+                    <span className="flex items-center gap-2 text-[var(--ink-muted)]">
+                      <Calendar size={12} />
+                      Criado em
+                    </span>
                     <span className="text-white">{new Date(lead.created_at).toLocaleDateString("pt-BR")}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[var(--ink-muted)]">Atualizado em</span>
+                    <span className="flex items-center gap-2 text-[var(--ink-muted)]">
+                      <Clock size={12} />
+                      Atualizado em
+                    </span>
                     <span className="text-white">{new Date(lead.updated_at).toLocaleDateString("pt-BR")}</span>
                   </div>
                 </div>
@@ -220,8 +232,9 @@ export function LeadDetailsModal({ lead, onClose, onStatusChange, onDelete }: Le
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="rounded-xl border border-red-500/30 px-5 py-2.5 text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-60"
+                className="flex items-center gap-2 rounded-xl border border-red-500/30 px-5 py-2.5 text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-60"
               >
+                <Trash2 size={16} />
                 {deleting ? "Excluindo..." : "Excluir lead"}
               </button>
             ) : (

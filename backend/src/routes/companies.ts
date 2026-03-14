@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { z } from "zod";
 import crypto from "crypto";
-import { pool } from "../db/pool";
-import { env } from "../config/env";
-import { requireAuth } from "../middleware/auth";
-import { classifyCompany } from "./ai";
+import { pool } from "../db/pool.js";
+import { env } from "../config/env.js";
+import { requireAuth } from "../middleware/auth.js";
+import { classifyCompany } from "./ai.js";
 
 const router = Router();
 

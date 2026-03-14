@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { z } from "zod";
-import { env } from "../config/env";
-import { requireAuth } from "../middleware/auth";
+import { env } from "../config/env.js";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = Router();
 

@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { z } from "zod";
-import { pool } from "../db/pool";
+import { pool } from "../db/pool.js";
 import crypto from "crypto";
-import { requireAuth } from "../middleware/auth";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = Router();
 router.use(requireAuth);

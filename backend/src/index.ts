@@ -1,5 +1,7 @@
 import "dotenv/config";
+console.log("[DEBUG] Starting server - environment loaded");
 import express from "express"; // Restarted at 2026-03-13 20:47
+console.log("[DEBUG] Express imported");
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";

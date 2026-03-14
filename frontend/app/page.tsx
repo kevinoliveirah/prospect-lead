@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Unbounded, Sora } from "next/font/google";
 import { useAuth } from "../components/AuthProvider";
+import { CheckCircle, Search, ArrowRight, Zap, BarChart3, Cloud, Filter, Download, Users, SlidersHorizontal } from "lucide-react";
+import Image from "next/image";
+import { CityAutocomplete } from "../components/CityAutocomplete";
 
 const heading = Unbounded({
   subsets: ["latin"],
@@ -158,6 +161,14 @@ export default function Home() {
         <header className="relative z-10">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6">
             <Link href="/" className="group flex items-center gap-3 transition hover:opacity-80">
+              <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1 shadow-sm">
+                <Image
+                  src="/logo.png"
+                  alt="Prospect Lead Logo"
+                  fill
+                  className="object-contain p-1"
+                />
+              </div>
               <h1 className="text-xl font-bold text-white transition-colors group-hover:text-[var(--accent)]">
                 Prospect Lead
               </h1>
@@ -231,25 +242,26 @@ export default function Home() {
                       onChange={(event) => setSegment(event.target.value)}
                     />
                   </label>
-                  <label className="text-xs uppercase tracking-[0.3em] text-[var(--ink-muted)]">
-                    Cidade
-                    <input
-                      className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40"
+                  <div className="flex flex-col gap-2">
+                    <span className="text-xs uppercase tracking-[0.3em] text-[var(--ink-muted)]">Cidade</span>
+                    <CityAutocomplete
+                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40"
                       placeholder="Ex: Curitiba, PR"
                       value={city}
-                      onChange={(event) => setCity(event.target.value)}
+                      onChange={setCity}
                     />
-                  </label>
+                  </div>
                   <button
                     type="submit"
-                    className="rounded-2xl bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/30"
+                    className="flex items-center justify-center gap-2 rounded-2xl bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/30 transition hover:brightness-110"
                   >
+                    <Search size={18} />
                     Buscar
                   </button>
                 </form>
                 <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-[var(--ink-muted)]">
-                  <span className="rounded-full bg-white/5 px-3 py-1">
-                    ⌘K para buscar rápido
+                  <span className="flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1">
+                    <span className="text-[10px]">⌘</span>K para buscar rápido
                   </span>
                   <span className="rounded-full bg-white/5 px-3 py-1">
                     50 leads de demonstração
@@ -269,9 +281,10 @@ export default function Home() {
                   <>
                     <Link
                       href="/register"
-                      className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
+                      className="flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110"
                     >
                       Iniciar agora
+                      <ArrowRight size={16} />
                     </Link>
                     <Link
                       href="/login"
@@ -346,9 +359,11 @@ export default function Home() {
           <div className="rounded-3xl border border-white/10 bg-[var(--surface)]/80 p-8">
             <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Com o Prospect Lead</p>
             <h2 className={`mt-4 text-2xl ${heading.className}`}>Entrega rápida e organizada.</h2>
-            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-[var(--ink-muted)]">
-              embalagens industriais · Curitiba PR
-              <span className="ml-2 text-emerald-300">2.8s ✓</span>
+            <div className="mt-6 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-[var(--ink-muted)]">
+              <span>embalagens industriais · Curitiba PR</span>
+              <span className="flex items-center gap-1.5 text-emerald-300">
+                2.8s <CheckCircle size={14} />
+              </span>
             </div>
             <div className="mt-6 grid gap-3 text-sm text-[var(--ink-muted)]">
               <div className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-2">
@@ -385,8 +400,11 @@ export default function Home() {
           </Link>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((feature) => (
-            <div key={feature.title} className="rounded-2xl border border-white/10 bg-[var(--surface)]/70 p-6">
+          {FEATURES_EXTENDED.map((feature) => (
+            <div key={feature.title} className="rounded-2xl border border-white/10 bg-[var(--surface)]/70 p-6 transition hover:bg-[var(--surface)] hover:border-[var(--accent)]/30 group">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 group-hover:bg-[var(--accent)]/10 transition-colors">
+                {feature.icon}
+              </div>
               <h3 className="text-lg font-semibold text-white">{feature.title}</h3>
               <p className="mt-3 text-sm text-[var(--ink-muted)]">{feature.text}</p>
             </div>
@@ -479,9 +497,10 @@ export default function Home() {
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
               href="/register"
-              className="rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/30"
+              className="flex items-center gap-2 rounded-full bg-[var(--accent)] px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-[var(--accent)]/30 transition hover:brightness-110"
             >
               Criar conta
+              <ArrowRight size={18} />
             </Link>
             <Link
               href="/login"
@@ -499,8 +518,18 @@ export default function Home() {
       <footer className="border-t border-white/10">
         <div className="mx-auto max-w-6xl px-6 py-10 grid gap-8 md:grid-cols-[1.3fr_1fr_1fr] text-sm text-[var(--ink-muted)]">
           <div>
-            <p className={`text-lg text-white ${heading.className}`}>Prospect Lead</p>
-            <p className="mt-2">
+            <div className="flex items-center gap-3">
+              <div className="relative h-8 w-8 overflow-hidden rounded-lg border border-white/10 bg-white/5 p-1 shadow-sm">
+                <Image
+                  src="/logo.png"
+                  alt="Logo"
+                  fill
+                  className="object-contain p-1"
+                />
+              </div>
+              <p className={`text-lg text-white ${heading.className}`}>Prospect Lead</p>
+            </div>
+            <p className="mt-4">
               Prospecção local com dados públicos organizados para o time comercial.
             </p>
           </div>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
-import { GoogleMap, useLoadScript, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import type { Company } from "../lib/types";
+import { useGoogleMaps } from "./GoogleMapsProvider";
 
 type MapPreviewProps = {
   items: Company[];
@@ -10,9 +10,7 @@ type MapPreviewProps = {
 };
 
 export function MapPreview({ items, onSelect }: MapPreviewProps) {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-  });
+  const { isLoaded, loadError } = useGoogleMaps();
 
   const points = useMemo(() => {
     return items

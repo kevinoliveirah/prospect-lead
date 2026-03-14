@@ -4,11 +4,13 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "./AuthProvider";
+import { X, Menu, LayoutDashboard, Database, Map as MapIcon, LogOut } from "lucide-react";
+import Image from "next/image";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/crm", label: "CRM" },
-  { href: "/mapa", label: "Mapa" }
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/crm", label: "CRM", icon: Database },
+  { href: "/mapa", label: "Mapa", icon: MapIcon }
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -44,7 +46,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header className="border-b border-white/5 bg-[var(--surface)]/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
           <Link href="/" className="group flex items-center gap-3 transition hover:opacity-80">
-            <h1 className="text-lg font-bold text-white group-hover:text-[var(--accent)] transition-colors">Area do Produto</h1>
+            <div className="relative h-8 w-8 overflow-hidden rounded-lg border border-white/10 bg-white/5 p-1 shadow-sm">
+              <Image
+                src="/logo.png"
+                alt="Prospect Lead Logo"
+                fill
+                className="object-contain p-1"
+              />
+            </div>
+            <h1 className="text-lg font-bold text-white group-hover:text-[var(--accent)] transition-colors">Prospect Lead</h1>
           </Link>
           <nav className="hidden md:flex items-center gap-3 text-sm">
             {navItems.map((item) => {
@@ -53,12 +63,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`rounded-full px-4 py-2 transition ${
+                  className={`flex items-center gap-2 rounded-full px-4 py-2 transition ${
                     active
                       ? "bg-[var(--accent)] text-white"
                       : "bg-white/5 text-[var(--ink-muted)] hover:bg-white/10"
                   }`}
                 >
+                  <item.icon size={16} />
                   {item.label}
                 </Link>
               );
@@ -67,10 +78,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-[var(--ink-muted)] md:hidden transition hover:bg-white/10 hover:text-white"
             aria-label="Menu"
           >
-            {isMenuOpen ? "✕" : "☰"}
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
           <div className="hidden md:flex items-center gap-3 text-sm">
@@ -85,8 +96,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 logout();
                 router.replace("/login");
               }}
-              className="rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.2em] text-[var(--ink-muted)] transition hover:bg-white/5"
+              className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.2em] text-[var(--ink-muted)] transition hover:bg-white/5 hover:text-white"
             >
+              <LogOut size={14} />
               Sair
             </button>
           </div>
@@ -101,12 +113,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`block rounded-xl px-4 py-3 text-sm font-medium transition ${
+                  className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
                     pathname?.startsWith(item.href)
                       ? "bg-[var(--accent)] text-white"
                       : "bg-white/5 text-[var(--ink-muted)] hover:bg-white/10"
                   }`}
                 >
+                  <item.icon size={18} />
                   {item.label}
                 </Link>
               ))}
