@@ -59,19 +59,25 @@ export default function MapaPage() {
 
   useEffect(() => {
     if (!token) return;
-    const fetchMetadata = async () => {
+    const fetchInitial = async () => {
       try {
-        const [historyData, segmentData] = await Promise.all([
+        setLoading(true);
+        const [searchData, historyData, segmentData] = await Promise.all([
+          apiFetch<SearchResponse>("/companies/search?limit=25", {}, token),
           apiFetch<any[]>("/companies/history", {}, token),
           apiFetch<SegmentHistoryItem[]>("/companies/history/segments", {}, token)
         ]);
+        setResults(searchData.results || []);
+        setSource(searchData.source || "database");
         setHistory(historyData || []);
         setSegmentHistory(segmentData || []);
       } catch (err: any) {
-        console.error("Failed to fetch metadata:", err);
+        console.error("Failed to fetch initial data:", err);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchMetadata();
+    fetchInitial();
   }, [token]);
 
   useEffect(() => {
@@ -228,9 +234,6 @@ export default function MapaPage() {
     <section className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-wrap items-end justify-between gap-6 pb-2">
         <div className="max-w-xl">
-          <div className="flex items-center gap-3 lg:hidden mb-4">
-             <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
-          </div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">Mapa de Prospecção</h1>
           <p className="text-[var(--ink-muted)] leading-relaxed text-sm">
             Busque empresas por segmento e cidade. A IA classifica automaticamente o tipo de negócio e potencial financeiro.
@@ -316,61 +319,6 @@ export default function MapaPage() {
         </form>
       </div>
 
-      {history.length > 0 && (
-        <div className="no-scrollbar flex flex-wrap items-center gap-3 overflow-x-auto pb-1">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--ink-muted)]">Recentes:</span>
-          {history.map((h: any) => (
-            <button
-              key={h.id}
-              onClick={() => {
-                setQuery({ ...query, q: h.query, city: h.city || "", radius_km: h.radius_km || "" });
-                // We don't call handleSearch directly to allow visual update of fields first, but user can click search.
-              }}
-              className="rounded-full bg-white/5 border border-white/5 px-4 py-1.5 text-xs text-[var(--ink-muted)] transition hover:bg-white/10 hover:text-white shadow-sm"
-            >
-              🕒 {h.query} {h.city ? `(${h.city})` : ""}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {segmentHistory.length > 0 && (
-        <div className="rounded-3xl border border-white/5 bg-[var(--surface)]/60 p-6">
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--ink-muted)]">
-              Historico por segmento
-            </h3>
-            <span className="text-xs text-[var(--ink-muted)]">
-              {segmentHistory.length} segmentos
-            </span>
-          </div>
-          <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {segmentHistory.map((item) => (
-              <button
-                key={item.segment}
-                onClick={() => {
-                  setQuery({
-                    ...query,
-                    q: item.segment,
-                    city: item.last_city || "",
-                    radius_km: item.last_radius_km ? String(item.last_radius_km) : query.radius_km
-                  });
-                }}
-                className="rounded-2xl border border-white/10 bg-white/5 p-4 text-left hover:bg-white/10 transition"
-              >
-                <p className="text-sm font-semibold text-white truncate">{item.segment}</p>
-                <p className="mt-1 text-xs text-[var(--ink-muted)]">
-                  {item.total} buscas
-                </p>
-                <p className="mt-2 text-[10px] text-[var(--ink-muted)]">
-                  Ultima: {new Date(item.last_searched).toLocaleDateString("pt-BR")}
-                  {item.last_city ? ` · ${item.last_city}` : ""}
-                </p>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       {error ? (
         <div className="rounded-2xl border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-400">

@@ -158,11 +158,10 @@ export default function Home() {
         <header className="relative z-10">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6">
             <Link href="/" className="group flex items-center gap-3 transition hover:opacity-80">
-            <img src="/logo.png" alt="Prospect Lead Logo" className="h-10 w-auto object-contain brightness-110" />
-            <div className="hidden sm:block border-l border-white/10 pl-4">
-              <h1 className="text-sm font-bold uppercase tracking-widest text-white transition-colors group-hover:text-[var(--accent)]">Area do Produto</h1>
-            </div>
-          </Link>
+              <h1 className="text-xl font-bold text-white transition-colors group-hover:text-[var(--accent)]">
+                Prospect Lead
+              </h1>
+            </Link>
             <nav className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--ink-muted)]">
               <Link href="#capacidades" className="rounded-full border border-white/10 px-4 py-2 hover:text-white hover:bg-white/5 transition">
                 Recursos
@@ -208,7 +207,9 @@ export default function Home() {
         <div className="relative mx-auto max-w-6xl px-6 pt-16 pb-20">
           <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] items-start">
             <div className="animate-fade-up">
-              <img src="/logo.png" alt="Prospect Lead Logo" className="mb-8 h-12 md:h-16 w-auto object-contain" />
+              <p className="text-xs uppercase tracking-[0.4em] text-[var(--ink-muted)] mb-6">
+                Prospect Lead
+              </p>
               <h1 className={`mt-6 text-4xl leading-tight md:text-5xl ${heading.className}`}>
                 Prospecção local com dados públicos organizados em minutos.
               </h1>

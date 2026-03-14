@@ -84,13 +84,10 @@ export default function RegisterPage() {
               ← Voltar ao inicio
             </Link>
           </div>
-          <div className="flex flex-col items-center">
-            <img src="/logo.png" alt="Prospect Lead Logo" className="mb-8 h-12 w-auto object-contain" />
-            <h1 className="text-2xl font-bold text-white">Criar sua conta</h1>
-          </div>
-          <p className="mt-2 text-sm text-[var(--ink-muted)]">
-            Configure seu time e comece a salvar empresas no CRM.
-          </p>
+          <h1 className="text-2xl font-bold text-white text-center">
+            Criar conta no Prospect Lead
+          </h1>
+          
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <label className="block text-sm">

@@ -126,10 +126,9 @@ export default function LoginPage() {
               ← Voltar ao inicio
             </Link>
           </div>
-          <div className="flex flex-col items-center">
-            <img src="/logo.png" alt="Prospect Lead Logo" className="mb-8 h-12 w-auto object-contain" />
-            <h1 className="text-2xl font-bold text-white">Entrar no sistema</h1>
-          </div>
+          <h1 className="text-2xl font-bold text-white text-center">
+            Entrar no Prospect Lead
+          </h1>
           <p className="mt-2 text-sm text-[var(--ink-muted)]">
             Acesse seu pipeline, veja o mapa e continue a prospeccao.
           </p>

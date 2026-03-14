@@ -1,51 +1,54 @@
-# Mapa B2B
+# Prospect Lead Pro 🚀
 
-Starter monorepo with frontend (Next.js + Tailwind) and backend (Express + TypeScript).
+O **Prospect Lead Pro** é um monorepo full-stack desenvolvido para automatizar a prospecção de empresas e o gerenciamento de leads. Centralize suas buscas no Google Maps, classifique empresas com IA e controle seu funil de vendas em um só lugar.
 
-## Quick start
+---
 
-Backend:
+## 🏗️ Estrutura do Projeto
+
+- **Frontend**: Next.js 13+ com Tailwind CSS (Design Premium Night).
+- **Backend**: API REST com Express e TypeScript.
+- **Database**: PostgreSQL (Persistência e Performance).
+
+---
+
+## ⚡ Início Rápido
+
+Para rodar o projeto localmente:
+
+### Backend
 ```sh
 cd backend
 npm install
 npm run dev
 ```
 
-Frontend:
+### Frontend
 ```sh
 cd frontend
 npm install
 npm run dev
 ```
 
-## Environment
+> [!NOTE]
+> Certifique-se de configurar os arquivos `.env` tanto no frontend quanto no backend seguindo os exemplos disponíveis.
 
-Copy the example env files and fill values:
-- backend\.env.example -> backend\.env
-- frontend\.env.example -> frontend\.env
+---
 
-Frontend routes:
-- / (landing)
-- /login
-- /register
-- /dashboard
-- /mapa
-- /crm
+## 📄 Documentação Completa
 
-API endpoints (base http://localhost:4000):
-- GET /health
-- POST /auth/register
-- POST /auth/login
-- GET /auth/me
-- GET /companies/search
-- GET /leads
-- POST /leads
-- PATCH /leads/:id
-- GET /leads/:id/notes
-- POST /leads/:id/notes
-- GET /dashboard/summary
-- POST /ai/prospect
+Para detalhes sobre funcionalidades, arquitetura técnica e guia de instalação avançado, consulte a nossa documentação oficial:
 
-## Database
+👉 **[DOCUMENTATION.md](./DOCUMENTATION.md)**
 
-PostgreSQL schema is in database\schema.sql.
+---
+
+## 📁 Principais Funcionalidades
+- **Mapa de Prospecção**: Busca geolocalizada com integração direta ao CRM.
+- **Enriquecimento via IA**: Classificação automática de B2B/B2C e estimativa de lucro.
+- **CRM Kanban**: Gestão visual de leads em pipeline customizável.
+- **Integração WhatsApp**: Templates prontos para abordagem rápida.
+
+---
+
+Desenvolvido para transformar buscas em clientes reais.
