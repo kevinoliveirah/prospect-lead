@@ -1,5 +1,12 @@
+const envBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+  typeof window === "undefined"
+    ? envBase ?? "http://localhost:4000"
+    : // Em dispositivos na mesma rede, usar o host atual evita o problema de "localhost"
+      (!envBase || envBase.includes("localhost") || envBase.includes("127.0.0.1"))
+        ? `${window.location.protocol}//${window.location.hostname}:4000`
+        : envBase;
 
 type ApiError = { error?: string };
 

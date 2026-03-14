@@ -70,11 +70,11 @@ router.get("/search", requireAuth, async (req, res, next) => {
     // 2. Search Google if API Key and Query present
     if (env.GOOGLE_MAPS_API_KEY && params.q) {
       const googleLimit = Math.min(overallLimit, 60);
-      const expandedQueries = expandQuery(params.q, params.city);
+      const expandedQueries = expandQuery(params.q!, params.city);
       const queryCount = Math.min(expandedQueries.length, 2);
       const perQueryLimit = Math.ceil(googleLimit / Math.max(queryCount, 1));
       const searchPromises = expandedQueries.slice(0, queryCount).map(q =>
-        searchGoogle(q, env.GOOGLE_MAPS_API_KEY, params.radius_km, perQueryLimit)
+        searchGoogle(q, env.GOOGLE_MAPS_API_KEY!, params.radius_km, perQueryLimit)
       );
       const allGoogleResults = (await Promise.all(searchPromises)).flat();
 
@@ -242,7 +242,7 @@ function classifyByGoogleTypes(types: string[]): "B2B" | "B2C" | null {
 
 // ─── Website data scraper ─────────────────────────────────────────────────────
 interface WebsiteData {
-  social: Record<string, string>;
+  social?: Record<string, string>;
   phone?: string;
   email?: string;
 }
@@ -353,7 +353,7 @@ async function searchGoogle(query: string, apiKey: string, radiusKm?: number, li
 
   const detailedResults = await Promise.all(
     slicedResults.map(async (item: any) => {
-      let details: Partial<WebsiteData & { phone?: string; website?: string; email?: string; social?: Record<string, string> }> = {};
+      let details: Partial<WebsiteData & { phone?: string; website?: string; email?: string; social?: Record<string, string> | null }> = {};
       try {
         details = await fetchPlaceDetails(item.place_id, apiKey);
       } catch {
@@ -376,7 +376,7 @@ async function searchGoogle(query: string, apiKey: string, radiusKm?: number, li
         phone: details.phone,
         website: details.website,
         email: details.email,
-        social: details.social ?? null
+        social: details.social ?? undefined
       };
     })
   );
@@ -424,7 +424,7 @@ async function fetchPlaceDetails(placeId: string, apiKey: string) {
     phone: phone ?? webData.phone,
     website,
     email: webData.email,
-    social: Object.keys(webData.social).length > 0 ? webData.social : null,
+    social: webData.social && Object.keys(webData.social).length > 0 ? webData.social : undefined,
     business_type: googleTypeClassification ?? classification.type,
     revenue_estimate: classification.revenue
   };

@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Unbounded, Sora } from "next/font/google";
 import { useAuth } from "../components/AuthProvider";
-import { CheckCircle, Search, ArrowRight, Zap, BarChart3, Cloud, Filter, Download, Users, SlidersHorizontal } from "lucide-react";
-import Image from "next/image";
+import { CheckCircle, Search, ArrowRight, Zap, BarChart3, Cloud, Filter, Download } from "lucide-react";
 import { CityAutocomplete } from "../components/CityAutocomplete";
 
 const heading = Unbounded({
@@ -19,118 +18,56 @@ const body = Sora({
   weight: ["400", "500", "600"]
 });
 
-const SAMPLE_LEADS = [
+const FEATURES = [
   {
-    initials: "PL",
-    name: "Prime Line",
-    meta: "Vila Mariana · B2B",
-    email: "contato@primeline.com",
-    phone: "+55 11 91234-7788"
-  },
-  {
-    initials: "NV",
-    name: "Nova Vista",
-    meta: "Moema · Serviços",
-    email: "comercial@novavista.co",
-    phone: "+55 11 92345-8899"
-  },
-  {
-    initials: "OT",
-    name: "Octane Tech",
-    meta: "Pinheiros · SaaS",
-    email: "hello@octane.tech",
-    phone: "+55 11 93456-9900"
-  }
-];
-
-const FEATURES_EXTENDED = [
-  {
-    title: "Dados enriquecidos",
-    text: "Fontes públicas completam telefone, e-mail e social.",
-    icon: <Cloud className="text-[var(--accent)]" size={20} />
-  },
-  {
-    title: "Filtros precisos",
-    text: "Busca por bairro ou KM para refinar a prospecção.",
+    title: "Mapa com filtros",
+    text: "Busque empresas por segmento, cidade, raio e limite de resultados.",
     icon: <Filter className="text-[var(--accent)]" size={20} />
   },
   {
-    title: "Exportação CSV",
-    text: "Pronto para importar no seu CRM sem retrabalho.",
-    icon: <Download className="text-[var(--accent)]" size={20} />
+    title: "Classificação B2B/B2C",
+    text: "A IA separa indústrias de varejo para você priorizar.",
+    icon: <BarChart3 className="text-[var(--accent)]" size={20} />
   },
   {
-    title: "Fluxo integrado",
-    text: "Mapa e pipeline em um só lugar para o seu time.",
-    icon: <Users className="text-[var(--accent)]" size={20} />
-  },
-  {
-    title: "Validação",
-    text: "Redução de dados incompletos em tempo real.",
+    title: "Salvar leads e etapas",
+    text: "Envie empresas para o painel, mova status e registre notas.",
     icon: <CheckCircle className="text-[var(--accent)]" size={20} />
   },
   {
-    title: "Métricas",
-    text: "Visualize o retorno por segmento e localidade.",
-    icon: <SlidersHorizontal className="text-[var(--accent)]" size={20} />
+    title: "Exportação CSV",
+    text: "Baixe resultados do mapa ou do pipeline para trabalhar no Excel.",
+    icon: <Download className="text-[var(--accent)]" size={20} />
+  },
+  {
+    title: "Detalhes e contatos",
+    text: "Telefone, site e redes sociais quando disponíveis no banco público.",
+    icon: <Cloud className="text-[var(--accent)]" size={20} />
+  },
+  {
+    title: "Histórico de buscas",
+    text: "Repita consultas recentes em um clique direto do mapa.",
+    icon: <Search className="text-[var(--accent)]" size={20} />
+  },
+  {
+    title: "Abordagem com IA",
+    text: "Gere uma mensagem inicial para cada lead dentro do CRM.",
+    icon: <Zap className="text-[var(--accent)]" size={20} />
   }
 ];
 
-const STEPS = [
+const FLOW = [
   {
-    title: "Informe o alvo",
-    text: "Escolha segmento e local. O motor busca as empresas relevantes."
+    title: "Busque no mapa",
+    text: "Defina segmento, cidade, raio e limite. O mapa retorna empresas públicas."
   },
   {
-    title: "Enriqueça rápido",
-    text: "Capturamos contatos públicos e organizamos em cards prontos."
+    title: "Revise e salve",
+    text: "Abra detalhes, veja contatos e salve como lead com um clique."
   },
   {
-    title: "Leve para o CRM",
-    text: "Exporte CSV ou sincronize o pipeline para ativar o outbound."
-  }
-];
-
-const PRICING = [
-  {
-    name: "Solo",
-    price: "R$ 49",
-    cadence: "/mês",
-    description: "Para consultores e SDRs que querem volume com foco.",
-    features: [
-      "2.500 leads / mês",
-      "Exportação CSV",
-      "Dados públicos",
-      "Acesso à API"
-    ],
-    cta: "Começar teste"
-  },
-  {
-    name: "Time",
-    price: "R$ 149",
-    cadence: "/mês",
-    description: "Para equipes que rodam campanhas contínuas.",
-    features: [
-      "10.000 leads / mês",
-      "Integrações com CRM",
-      "Dados completos",
-      "Suporte prioritário"
-    ],
-    cta: "Começar agora",
-    highlight: true
-  },
-  {
-    name: "Enterprise",
-    price: "Sob consulta",
-    cadence: "",
-    description: "Para operações com SLA e integrações dedicadas.",
-    features: [
-      "Volume sob medida",
-      "Webhooks",
-      "Multi-times",
-      "Onboarding assistido"
-    ],
-    cta: "Falar com vendas"
+    title: "Gerencie e exporte",
+    text: "Atualize status, registre notas, gere mensagem com IA e exporte CSV."
   }
 ];
 
@@ -172,14 +109,14 @@ export default function Home() {
               </h1>
             </Link>
             <nav className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--ink-muted)]">
-              <Link href="#capacidades" className="rounded-full border border-white/10 px-4 py-2 hover:text-white hover:bg-white/5 transition">
+              <Link href="#recursos" className="rounded-full border border-white/10 px-4 py-2 hover:text-white hover:bg-white/5 transition">
                 Recursos
               </Link>
-              <Link href="#processo" className="rounded-full border border-white/10 px-4 py-2 hover:text-white hover:bg-white/5 transition">
-                Processo
+              <Link href="#fluxo" className="rounded-full border border-white/10 px-4 py-2 hover:text-white hover:bg-white/5 transition">
+                Como funciona
               </Link>
-              <Link href="#planos" className="rounded-full border border-white/10 px-4 py-2 hover:text-white hover:bg-white/5 transition">
-                Planos
+              <Link href="#cta" className="rounded-full border border-white/10 px-4 py-2 hover:text-white hover:bg-white/5 transition">
+                Criar conta
               </Link>
             </nav>
             <div className="flex items-center gap-3">
@@ -220,10 +157,10 @@ export default function Home() {
                 Prospect Lead
               </p>
               <h1 className={`mt-6 text-4xl leading-tight md:text-5xl ${heading.className}`}>
-                Prospecção local com dados públicos organizados em minutos.
+                Prospecção local com dados públicos que você consegue usar agora.
               </h1>
               <p className="mt-4 max-w-xl text-lg text-[var(--ink-muted)]">
-                Defina categoria e cidade, deixe o motor buscar, enriquecer e entregar uma lista pronta para contato.
+                Busque empresas por segmento e cidade, veja contatos disponíveis, salve como lead e exporte quando precisar.
               </p>
 
               <div className="mt-8 rounded-3xl border border-white/10 bg-[var(--surface)]/80 p-5 shadow-sm backdrop-blur">
@@ -240,9 +177,9 @@ export default function Home() {
                       onChange={(event) => setSegment(event.target.value)}
                     />
                   </label>
-                  <div className="flex flex-col gap-2">
-                    <span className="text-xs uppercase tracking-[0.3em] text-[var(--ink-muted)]">Cidade</span>
-                    <CityAutocomplete
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs uppercase tracking-[0.3em] text-[var(--ink-muted)]">Cidade</span>
+                  <CityAutocomplete
                       className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40"
                       placeholder="Ex: Curitiba, PR"
                       value={city}
@@ -257,14 +194,9 @@ export default function Home() {
                     Buscar
                   </button>
                 </form>
-                <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-[var(--ink-muted)]">
-                  <span className="flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1">
-                    <span className="text-[10px]">⌘</span>K para buscar rápido
-                  </span>
-                  <span className="rounded-full bg-white/5 px-3 py-1">
-                    50 leads de demonstração
-                  </span>
-                </div>
+                <p className="mt-3 text-xs text-[var(--ink-muted)]">
+                  Resultados usam apenas dados públicos. Sem etapas extras nem cartão.
+                </p>
               </div>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -297,108 +229,48 @@ export default function Home() {
 
             <div className="animate-fade-up rounded-3xl border border-white/10 bg-[var(--surface)]/80 p-6 shadow-lg backdrop-blur" style={{ animationDelay: "0.1s" }}>
               <div className="flex items-center justify-between text-xs text-[var(--ink-muted)] uppercase tracking-[0.35em]">
-                <span>Painel</span>
-                <span>São Paulo, SP</span>
-              </div>
-              <div className="mt-6 flex items-end justify-between">
-                <div>
-                  <p className="text-5xl font-semibold text-white">64</p>
-                  <p className="text-xs uppercase tracking-[0.3em] text-[var(--ink-muted)]">Resultados</p>
-                </div>
-                <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
-                  Atualizado
-                </span>
+                <span>Fluxo pronto</span>
+                <span className="rounded-full bg-white/5 px-3 py-1 text-[10px] font-semibold text-white">Mapa + Leads</span>
               </div>
 
               <div className="mt-6 space-y-3">
-                {SAMPLE_LEADS.map((lead) => (
-                  <div key={lead.name} className="flex items-center gap-4 rounded-2xl border border-white/5 bg-white/5 px-4 py-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-sm font-semibold text-white">
-                      {lead.initials}
+                {FEATURES.filter((_, index) => index < 4).map((feature) => (
+                  <div key={feature.title} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                    <div className="rounded-lg bg-[var(--accent)]/10 p-2 text-[var(--accent)]">
+                      {feature.icon}
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-white">{lead.name}</p>
-                      <p className="text-xs text-[var(--ink-muted)]">{lead.meta}</p>
-                    </div>
-                    <div className="text-right text-xs text-[var(--ink-muted)]">
-                      <p>{lead.email}</p>
-                      <p>{lead.phone}</p>
+                    <div className="text-sm text-white">
+                      <p className="font-semibold">{feature.title}</p>
+                      <p className="mt-1 text-[var(--ink-muted)] text-xs leading-relaxed">{feature.text}</p>
                     </div>
                   </div>
                 ))}
               </div>
+
+              <div className="mt-6 rounded-2xl border border-white/10 bg-[var(--surface)] px-4 py-3 text-xs text-[var(--ink-muted)]">
+                Buscas e leads ficam salvos na sua conta. Você pode exportar CSV a qualquer momento.
+              </div>
             </div>
           </div>
 
-          <div className="mt-14 flex flex-wrap items-center gap-4 text-xs text-[var(--ink-muted)] uppercase tracking-[0.4em]">
-            <span>Times que confiam</span>
-            <span className="rounded-full border border-white/10 px-4 py-2">ACME</span>
-            <span className="rounded-full border border-white/10 px-4 py-2">GlobalTech</span>
-            <span className="rounded-full border border-white/10 px-4 py-2">Nexus</span>
-            <span className="rounded-full border border-white/10 px-4 py-2">Stratos</span>
-            <span className="rounded-full border border-white/10 px-4 py-2">Lumina</span>
-          </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-16">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-3xl border border-white/10 bg-[var(--surface)]/80 p-8">
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Sem motor</p>
-            <h2 className={`mt-4 text-2xl ${heading.className}`}>Pesquisa manual trava o ritmo.</h2>
-            <div className="mt-6 space-y-3 text-sm text-[var(--ink-muted)]">
-              <p>Mapas em abas, contatos dispersos e planilhas incompletas.</p>
-              <p>Resultado: baixa cobertura e follow-up lento.</p>
-            </div>
-            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-[var(--ink-muted)]">
-              Média: 1-2 horas para fechar 50 leads.
-            </div>
-          </div>
-          <div className="rounded-3xl border border-white/10 bg-[var(--surface)]/80 p-8">
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Com o Prospect Lead</p>
-            <h2 className={`mt-4 text-2xl ${heading.className}`}>Entrega rápida e organizada.</h2>
-            <div className="mt-6 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-[var(--ink-muted)]">
-              <span>embalagens industriais · Curitiba PR</span>
-              <span className="flex items-center gap-1.5 text-emerald-300">
-                2.8s <CheckCircle size={14} />
-              </span>
-            </div>
-            <div className="mt-6 grid gap-3 text-sm text-[var(--ink-muted)]">
-              <div className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-2">
-                <span>Studio Norte</span>
-                <span>hi@studionorte.com</span>
-              </div>
-              <div className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-2">
-                <span>Atlas Pack</span>
-                <span>comercial@atlaspack.co</span>
-              </div>
-              <div className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-2">
-                <span>Volta Labs</span>
-                <span>oi@voltalabs.io</span>
-              </div>
-            </div>
-            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-[var(--ink-muted)]">
-              Resultado: 200+ leads prontos para CRM.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="capacidades" className="mx-auto max-w-6xl px-6 py-16">
+      <section id="recursos" className="mx-auto max-w-6xl px-6 py-16">
         <div className="flex items-end justify-between gap-6 flex-wrap">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Capacidades</p>
-            <h2 className={`mt-4 text-3xl ${heading.className}`}>Um motor, vários atalhos.</h2>
+            <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Recursos disponíveis</p>
+            <h2 className={`mt-4 text-3xl ${heading.className}`}>O que já funciona hoje.</h2>
           </div>
           <Link
-            href="/crm"
+            href="/dashboard"
             className="rounded-full border border-white/20 px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white hover:bg-white/10 transition"
           >
-            Conectar com CRM
+            Ver painel
           </Link>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {FEATURES_EXTENDED.map((feature: any) => (
+          {FEATURES.map((feature) => (
             <div key={feature.title} className="rounded-2xl border border-white/10 bg-[var(--surface)]/70 p-6 transition hover:bg-[var(--surface)] hover:border-[var(--accent)]/30 group">
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 group-hover:bg-[var(--accent)]/10 transition-colors">
                 {feature.icon}
@@ -410,25 +282,18 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="processo" className="mx-auto max-w-6xl px-6 py-16">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      <section id="fluxo" className="mx-auto max-w-6xl px-6 py-16">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr]">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Processo</p>
-            <h2 className={`mt-4 text-3xl ${heading.className}`}>Três passos, um pipeline.</h2>
+            <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Como funciona</p>
+            <h2 className={`mt-4 text-3xl ${heading.className}`}>Três passos que já estão disponíveis.</h2>
             <p className="mt-3 text-sm text-[var(--ink-muted)]">
-              O Prospect Lead deixa a pesquisa pronta para ação comercial.
+              Use o mapa para encontrar empresas, salve como lead e acompanhe tudo no painel.
             </p>
-          </div>
-          <div className="rounded-3xl border border-white/10 bg-[var(--surface)]/80 p-6">
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Status</p>
-            <div className="mt-4 h-2 w-full rounded-full bg-white/10">
-              <div className="h-2 w-[68%] rounded-full bg-[var(--accent)]" />
-            </div>
-            <p className="mt-3 text-xs text-[var(--ink-muted)]">Enriquecendo 142 leads</p>
           </div>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {STEPS.map((step, index) => (
+          {FLOW.map((step, index) => (
             <div key={step.title} className="rounded-2xl border border-white/10 bg-[var(--surface)]/70 p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--ink-muted)]">
                 Etapa {String(index + 1).padStart(2, "0")}
@@ -440,57 +305,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="planos" className="mx-auto max-w-6xl px-6 py-16">
-        <div className="flex items-end justify-between gap-6 flex-wrap">
-          <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Planos</p>
-            <h2 className={`mt-4 text-3xl ${heading.className}`}>Pague pelo volume que usar.</h2>
-          </div>
-          <p className="text-sm text-[var(--ink-muted)]">Sem taxa por assento.</p>
-        </div>
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
-          {PRICING.map((plan) => (
-            <div
-              key={plan.name}
-              className={`rounded-3xl border p-6 ${plan.highlight ? "border-[var(--accent)] bg-[var(--accent)]/10" : "border-white/10 bg-[var(--surface)]/70"}`}
-            >
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
-                {plan.highlight && (
-                  <span className="rounded-full bg-[var(--accent)] px-3 py-1 text-xs font-semibold text-white">
-                    Popular
-                  </span>
-                )}
-              </div>
-              <div className="mt-4 flex items-end gap-2">
-                <span className="text-3xl font-semibold text-white">{plan.price}</span>
-                <span className="text-sm text-[var(--ink-muted)]">{plan.cadence}</span>
-              </div>
-              <p className="mt-3 text-sm text-[var(--ink-muted)]">{plan.description}</p>
-              <div className="mt-5 space-y-2 text-sm text-[var(--ink-muted)]">
-                {plan.features.map((item) => (
-                  <div key={item} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-                    {item}
-                  </div>
-                ))}
-              </div>
-              <Link
-                href="/register"
-                className="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/20 transition"
-              >
-                {plan.cta}
-              </Link>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-6 pb-20 pt-10">
+      <section id="cta" className="mx-auto max-w-6xl px-6 pb-20 pt-10">
         <div className="rounded-3xl border border-white/10 bg-[var(--surface)]/80 p-10 text-center">
           <p className="text-xs uppercase tracking-[0.35em] text-[var(--ink-muted)]">Comece agora</p>
-          <h2 className={`mt-4 text-3xl ${heading.className}`}>Chega de planilha solta.</h2>
+          <h2 className={`mt-4 text-3xl ${heading.className}`}>Use o mapa e o painel hoje.</h2>
           <p className="mt-3 text-sm text-[var(--ink-muted)]">
-            Prospecção local organizada, pronta para o CRM.
+            Crie sua conta para buscar empresas, salvar leads e exportar CSV sem etapas extras.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
@@ -508,7 +328,7 @@ export default function Home() {
             </Link>
           </div>
           <p className="mt-4 text-xs text-[var(--ink-muted)]">
-            Dados públicos enriquecidos · Sem cartão de crédito
+            Dados públicos · Sem cartão de crédito
           </p>
         </div>
       </section>
@@ -524,10 +344,10 @@ export default function Home() {
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-[var(--ink-muted)]">Produto</p>
             <div className="mt-3 space-y-2">
-              <p>Recursos</p>
-              <p>Integrações CRM</p>
-              <p>Preços</p>
-              <p>API</p>
+              <p>Mapa</p>
+              <p>Dashboard</p>
+              <p>CRM</p>
+              <p>Exportação CSV</p>
             </div>
           </div>
           <div>
