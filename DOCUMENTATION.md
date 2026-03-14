@@ -6,6 +6,7 @@ Seja bem-vindo à documentação oficial do **Prospect Lead Pro**. Este guia foi
 
 ## 🧭 Navegação Rápida
 - [🎯 Visão Geral do Produto](#-visão-geral-do-produto)
+- [🏗️ Arquitetura e Fluxo de Dados](#️-arquitetura-e-fluxo-de-dados)
 - [👤 Guia do Usuário (Operação VGV)](#-guia-do-usuário-operação-vgv)
 - [🛠️ Guia do Desenvolvedor (Engenharia)](#️-guia-do-desenvolvedor-engenharia)
 - [📡 Referência da API](#-referência-da-api)
@@ -20,6 +21,31 @@ O **Prospect Lead Pro** não é apenas um localizador de empresas; é um ecossis
 1.  **Descoberta Inteligente**: Usa dados brutos do Google Maps e os processa com IA.
 2.  **Qualificação Automática**: Identifica faturamento e perfil B2B/B2C sem intervenção humana.
 3.  **Gestão de Pipeline**: Um CRM Kanban fluido que mantém o foco no fechamento.
+
+---
+
+## 🏗️ Arquitetura do Sistema e Fluxo de Dados
+
+Para entender "por baixo do kapô", aqui está como a informação viaja no sistema:
+
+```mermaid
+graph TD
+    A["Usuário (SDR/Vendedor)"] -->|Busca: Segmento/Cidade| B["Frontend (Next.js 14)"]
+    B -->|API Request (JSON/JWT)| C["Backend (Node.js/Express)"]
+    C -->|Pesquisa Geográfica| D["Google Maps Places API"]
+    D -->|Dados Brutos| C
+    C -->|Processamento IA| E["Motor de Enriquecimento"]
+    E -->|Classifica B2B/B2C + Faturamento| C
+    C -->|Leads Qualificados| B
+    B -->|Ação: Capturar Lead| C
+    C -->|Persistência| F["Banco de Dados PostgreSQL"]
+    B -->|Engajamento| G["WhatsApp Web / Mobile"]
+```
+
+### O Fluxo da Vitória (Business Logic)
+1.  **Exploração**: O usuário define um nicho. O backend não apenas "repassa" a busca; ele filtra ruídos do Maps para garantir que apenas empresas com potencial comercial apareçam.
+2.  **Qualificação**: Nossa lógica de IA analisa o nome, categoria e metadados. Se for uma "Indústria de Usinagem", ela ganha o selo **B2B**. Se for um "Pet Shop", ganha **B2C**.
+3.  **Conversão**: O CRM Kanban organiza o caos. Quando você move um card, o sistema atualiza o timestamp da última ação, permitindo que gestores vejam a velocidade do funil.
 
 ---
 
