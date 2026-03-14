@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { GoogleMap, useLoadScript, MarkerF } from "@react-google-maps/api";
 import type { Company } from "../lib/types";
 
@@ -24,8 +25,8 @@ export function MapPreview({ items, onSelect }: MapPreviewProps) {
   const center = useMemo(() => {
     if (!points.length) return { lat: -23.5505, lng: -46.6333 }; // São Paulo default
 
-    const avgLat = points.reduce((acc, curr) => acc + (curr.latitude as number), 0) / points.length;
-    const avgLng = points.reduce((acc, curr) => acc + (curr.longitude as number), 0) / points.length;
+    const avgLat = points.reduce((acc: number, curr: any) => acc + (curr.latitude as number), 0) / points.length;
+    const avgLng = points.reduce((acc: number, curr: any) => acc + (curr.longitude as number), 0) / points.length;
     return { lat: avgLat, lng: avgLng };
   }, [points]);
 
@@ -147,7 +148,7 @@ export function MapPreview({ items, onSelect }: MapPreviewProps) {
           ],
         }}
       >
-        {points.map((pt) => (
+        {points.map((pt: any) => (
           <MarkerF
             key={pt.id}
             position={{ lat: pt.latitude as number, lng: pt.longitude as number }}

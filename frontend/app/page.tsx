@@ -397,7 +397,7 @@ export default function Home() {
           </Link>
         </div>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {FEATURES_EXTENDED.map((feature) => (
+          {FEATURES_EXTENDED.map((feature: any) => (
             <div key={feature.title} className="rounded-2xl border border-white/10 bg-[var(--surface)]/70 p-6 transition hover:bg-[var(--surface)] hover:border-[var(--accent)]/30 group">
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 group-hover:bg-[var(--accent)]/10 transition-colors">
                 {feature.icon}
