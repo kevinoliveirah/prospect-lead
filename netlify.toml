@@ -1,7 +1,7 @@
 [build]
-  command = "npm run build"
-  publish = "frontend/.next"
   base = "frontend"
+  command = "npm run build"
+  publish = ".next"
 
 [build.environment]
   NEXT_USE_LIBUV_NODEJS = "1"
