@@ -46,15 +46,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header className="border-b border-white/5 bg-[var(--surface)]/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
           <Link href="/" className="group flex items-center gap-3 transition hover:opacity-80">
-            <div className="relative h-8 w-8 overflow-hidden rounded-lg border border-white/10 bg-white/5 p-1 shadow-sm">
-              <Image
-                src="/logo.png"
-                alt="Prospect Lead Logo"
-                fill
-                className="object-contain p-1"
-              />
-            </div>
-            <h1 className="text-lg font-bold text-white group-hover:text-[var(--accent)] transition-colors">Prospect Lead</h1>
+            <h1 className="text-lg font-bold text-white group-hover:text-[var(--accent)] transition-colors">Area do Produto</h1>
           </Link>
           <nav className="hidden md:flex items-center gap-3 text-sm">
             {navItems.map((item) => {

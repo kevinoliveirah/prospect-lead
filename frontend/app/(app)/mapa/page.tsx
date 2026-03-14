@@ -7,7 +7,6 @@ import type { Company, Lead } from "../../../lib/types";
 import { useAuth } from "../../../components/AuthProvider";
 import { MapPreview } from "../../../components/MapPreview";
 import { CompanyDetailsModal } from "../../../components/CompanyDetailsModal";
-import { CityAutocomplete } from "../../../components/CityAutocomplete";
 
 type SearchResponse = {
   source: string;
@@ -257,11 +256,12 @@ export default function MapaPage() {
           </div>
           <div className="space-y-2">
             <label className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--ink-muted)]">Cidade</label>
-            <CityAutocomplete
+            <input
+              type="text"
               placeholder="Ex: São Paulo, RS..."
               className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-white transition focus:border-[var(--accent)]/50 focus:ring-1 focus:ring-[var(--accent)]/50 outline-none shadow-sm"
               value={query.city}
-              onChange={(val) => setQuery({ ...query, city: val })}
+              onChange={(e) => setQuery({ ...query, city: e.target.value })}
             />
           </div>
           <div className="space-y-2">

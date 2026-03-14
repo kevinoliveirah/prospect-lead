@@ -127,19 +127,9 @@ export default function LoginPage() {
               ← Voltar ao inicio
             </Link>
           </div>
-          <div className="flex flex-col items-center gap-4 mb-6">
-            <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-2 shadow-sm">
-              <Image
-                src="/logo.png"
-                alt="Prospect Lead Logo"
-                fill
-                className="object-contain p-2"
-              />
-            </div>
-            <h1 className="text-2xl font-bold text-white text-center">
-              Entrar no Prospect Lead
-            </h1>
-          </div>
+          <h1 className="text-2xl font-bold text-white text-center">
+            Entrar no Prospect Lead
+          </h1>
           <p className="mt-2 text-sm text-[var(--ink-muted)]">
             Acesse seu pipeline, veja o mapa e continue a prospeccao.
           </p>
