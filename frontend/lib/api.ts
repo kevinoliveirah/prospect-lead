@@ -3,10 +3,26 @@ const envBase = process.env.NEXT_PUBLIC_API_BASE_URL;
 const API_BASE_URL =
   typeof window === "undefined"
     ? envBase ?? "http://localhost:4000"
-    : // Em dispositivos na mesma rede, usar o host atual evita o problema de "localhost"
-      (!envBase || envBase.includes("localhost") || envBase.includes("127.0.0.1"))
-        ? `${window.location.protocol}//${window.location.hostname}:4000`
-        : envBase;
+    : (function() {
+        // No navegador, verificamos se a URL está configurada ou se estamos em localhost
+        const isLocalHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+        const isNetlify = window.location.hostname.includes("netlify.app");
+        
+        // Se a variável estiver vazia ou apontar para localhost, mas o site estiver no Netlify
+        if ((!envBase || envBase.includes("localhost")) && isNetlify) {
+          console.error("[API] Erro: NEXT_PUBLIC_API_BASE_URL não está configurada corretamente no Netlify.");
+          return "/error-api-url-not-set"; 
+        }
+
+        // Se estivermos em localhost e não houver envBase, usamos o padrão local
+        if (!envBase && isLocalHost) {
+          return "http://localhost:4000";
+        }
+
+        return envBase ?? "http://localhost:4000";
+      })();
+
+console.log(`[API] Base URL: ${API_BASE_URL}`);
 
 type ApiError = { error?: string };
 
