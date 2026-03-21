@@ -27,6 +27,7 @@ export function CityAutocomplete({
     suggestions: { status, data },
     setValue,
     clearSuggestions,
+    init,
   } = usePlacesAutocomplete({
     requestOptions: {
       types: ["(cities)"],
@@ -35,7 +36,14 @@ export function CityAutocomplete({
     debounce: 300,
     defaultValue: value,
     cache: 24 * 60 * 60,
+    initOnMount: false,
   });
+
+  useEffect(() => {
+    if (isLoaded) {
+      init();
+    }
+  }, [isLoaded, init]);
 
   useEffect(() => {
     if (value !== inputValue) {
