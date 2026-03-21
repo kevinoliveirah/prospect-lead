@@ -81,6 +81,22 @@ db.serialize(() => {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
   `);
+
+  // Safe migrations: add columns if they don't exist yet
+  const migrations = [
+    `ALTER TABLE leads ADD COLUMN address TEXT`,
+    `ALTER TABLE leads ADD COLUMN category TEXT`,
+    `ALTER TABLE leads ADD COLUMN latitude REAL`,
+    `ALTER TABLE leads ADD COLUMN longitude REAL`,
+  ];
+  migrations.forEach(sql => {
+    db.run(sql, [], (err) => {
+      // Ignore "duplicate column name" errors — column already exists
+      if (err && !err.message.includes("duplicate column name")) {
+        console.error("[DB Migration]", err.message);
+      }
+    });
+  });
 });
 
 // Polyfill query method to work like pg

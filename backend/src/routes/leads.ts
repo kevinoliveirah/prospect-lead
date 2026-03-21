@@ -3,6 +3,7 @@ import { z } from "zod";
 import { pool } from "../db/pool.js";
 import crypto from "crypto";
 import { requireAuth } from "../middleware/auth.js";
+import { env } from "../config/env.js";
 
 const router = Router();
 router.use(requireAuth);
@@ -10,6 +11,8 @@ router.use(requireAuth);
 const createLeadSchema = z.object({
   company_id: z.string().uuid().optional().nullable(),
   company_name: z.string().min(2),
+  address: z.string().optional().nullable(),
+  category: z.string().optional().nullable(),
   phone: z.string().optional().nullable(),
   email: z.string().email().optional().nullable(),
   website: z.string().url().optional().nullable(),
@@ -19,6 +22,8 @@ const createLeadSchema = z.object({
 
 const updateLeadSchema = z.object({
   company_name: z.string().min(2).optional(),
+  address: z.string().optional().nullable(),
+  category: z.string().optional().nullable(),
   phone: z.string().optional().nullable(),
   email: z.string().email().optional().nullable(),
   website: z.string().url().optional().nullable(),
@@ -29,6 +34,22 @@ const updateLeadSchema = z.object({
 const noteSchema = z.object({
   note: z.string().min(1)
 });
+
+async function geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
+  if (!env.GOOGLE_MAPS_API_KEY) return null;
+  try {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${env.GOOGLE_MAPS_API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json() as any;
+    if (data.status === "OK" && data.results?.[0]) {
+      const loc = data.results[0].geometry.location;
+      return { lat: loc.lat, lng: loc.lng };
+    }
+  } catch (err) {
+    console.error("[Geocode] Error:", err);
+  }
+  return null;
+}
 
 router.get("/", async (req, res, next) => {
   try {
@@ -42,7 +63,7 @@ router.get("/", async (req, res, next) => {
     }
 
     const result = await pool.query(
-      `SELECT id, company_id, company_name, phone, email, website, status, notes, created_at, updated_at
+      `SELECT id, company_id, company_name, address, category, phone, email, website, status, notes, latitude, longitude, created_at, updated_at
        FROM leads
        WHERE ${clauses.join(" AND ")}
        ORDER BY updated_at DESC`,
@@ -61,21 +82,40 @@ router.post("/", async (req, res, next) => {
     const status = data.status ?? "Novo lead";
     const id = crypto.randomUUID();
 
-    const result = await pool.query(
-      `INSERT INTO leads (id, user_id, company_id, company_name, phone, email, website, status, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING id, company_id, company_name, phone, email, website, status, notes, created_at, updated_at`,
+    await pool.query(
+      `INSERT INTO leads (id, user_id, company_id, company_name, address, category, phone, email, website, status, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
       [
         id,
         req.user?.id,
         data.company_id ?? null,
         data.company_name,
+        data.address ?? null,
+        data.category ?? null,
         data.phone ?? null,
         data.email ?? null,
         data.website ?? null,
         status,
         data.notes ?? null
       ]
+    );
+
+    // Geocode address in background and update coordinates
+    if (data.address) {
+      geocodeAddress(data.address).then(async (coords) => {
+        if (coords) {
+          await pool.query(
+            `UPDATE leads SET latitude = $1, longitude = $2 WHERE id = $3`,
+            [coords.lat, coords.lng, id]
+          );
+        }
+      }).catch(() => {});
+    }
+
+    const result = await pool.query(
+      `SELECT id, company_id, company_name, address, category, phone, email, website, status, notes, latitude, longitude, created_at, updated_at
+       FROM leads WHERE id = $1`,
+      [id]
     );
 
     return res.status(201).json(result.rows[0]);

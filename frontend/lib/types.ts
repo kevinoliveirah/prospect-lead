@@ -38,11 +38,15 @@ export type Lead = {
   id: string;
   company_id?: string | null;
   company_name: string;
+  address?: string | null;
+  category?: string | null;
   phone?: string | null;
   email?: string | null;
   website?: string | null;
   status: string;
   notes?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   created_at: string;
   updated_at: string;
 };

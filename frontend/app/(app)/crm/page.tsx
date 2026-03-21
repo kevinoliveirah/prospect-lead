@@ -28,6 +28,8 @@ export default function CrmPage() {
 
   const [form, setForm] = useState({
     company_name: "",
+    address: "",
+    category: "",
     phone: "",
     email: "",
     website: "",
@@ -81,6 +83,8 @@ export default function CrmPage() {
     try {
       const payload = {
         company_name: form.company_name,
+        address: form.address || undefined,
+        category: form.category || undefined,
         phone: form.phone || undefined,
         email: form.email || undefined,
         website: form.website || undefined,
@@ -94,7 +98,7 @@ export default function CrmPage() {
       );
       setLeads((prev) => [newLead, ...prev]);
       setForm({
-        company_name: "", phone: "", email: "", website: "", status: "Novo lead", notes: ""
+        company_name: "", address: "", category: "", phone: "", email: "", website: "", status: "Novo lead", notes: ""
       });
       setMessage("Lead criado com sucesso.");
     } catch (err) {
@@ -239,14 +243,25 @@ export default function CrmPage() {
               />
             </label>
             <label className="text-sm">
-              Status inicial
+              Segmento
               <input
-                value={form.status}
+                value={form.category}
                 onChange={(event) =>
-                  setForm((prev) => ({ ...prev, status: event.target.value }))
+                  setForm((prev) => ({ ...prev, category: event.target.value }))
                 }
                 className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white placeholder:text-white/40 shadow-sm outline-none ring-[var(--accent)] focus:ring-2"
-                placeholder="Novo lead"
+                placeholder="Ex: Metalurgia, Varejo..."
+              />
+            </label>
+            <label className="text-sm md:col-span-2">
+              Endereço (para pin no mapa 📍)
+              <input
+                value={form.address}
+                onChange={(event) =>
+                  setForm((prev) => ({ ...prev, address: event.target.value }))
+                }
+                className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white placeholder:text-white/40 shadow-sm outline-none ring-[var(--accent)] focus:ring-2"
+                placeholder="Ex: Av. Paulista, 1000, São Paulo, SP"
               />
             </label>
             <label className="text-sm">

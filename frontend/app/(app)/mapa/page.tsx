@@ -16,6 +16,29 @@ type SearchResponse = {
   results: Company[];
 };
 
+// Convert leads with coordinates to Company shape for the map
+function leadsToCompanies(leads: Lead[]): Company[] {
+  return leads
+    .filter(l => typeof l.latitude === "number" && typeof l.longitude === "number")
+    .map(l => ({
+      id: l.company_id ?? l.id,
+      name: l.company_name,
+      address: l.address ?? undefined,
+      category: l.category ?? undefined,
+      phone: l.phone ?? undefined,
+      website: l.website ?? undefined,
+      latitude: l.latitude!,
+      longitude: l.longitude!,
+    }));
+}
+
+// Merge company results with lead pins, avoiding duplicates by name
+function mergeResults(companies: Company[], leadCompanies: Company[]): Company[] {
+  const existing = new Set(companies.map(c => c.name.toLowerCase().trim()));
+  const uniqueLeads = leadCompanies.filter(l => !existing.has(l.name.toLowerCase().trim()));
+  return [...companies, ...uniqueLeads];
+}
+
 const INITIAL_QUERY = {
   q: "",
   city: "",
@@ -55,8 +78,13 @@ export default function MapaPage() {
     const fetchInitial = async () => {
       try {
         setLoading(true);
-        const searchData = await apiFetch<SearchResponse>("/companies/search?limit=25", {}, token);
-        setResults(searchData.results || []);
+        const [searchData, leadsData] = await Promise.all([
+          apiFetch<SearchResponse>("/companies/search?limit=25", {}, token),
+          apiFetch<Lead[]>("/leads", {}, token)
+        ]);
+        const leadCompanies = leadsToCompanies(leadsData);
+        const merged = mergeResults(searchData.results || [], leadCompanies);
+        setResults(merged);
         setSource(searchData.source || "database");
       } catch (err: any) {
         console.error("Failed to fetch initial data:", err);
@@ -148,12 +176,13 @@ export default function MapaPage() {
       );
       const queryString = new URLSearchParams(cleanParams).toString();
       
-      const data = await apiFetch<SearchResponse>(
-        `/companies/search?${queryString}`,
-        {},
-        token
-      );
-      setResults(data.results || []);
+      const [data, leadsData] = await Promise.all([
+        apiFetch<SearchResponse>(`/companies/search?${queryString}`, {}, token),
+        apiFetch<Lead[]>("/leads", {}, token)
+      ]);
+      const leadCompanies = leadsToCompanies(leadsData);
+      const merged = mergeResults(data.results || [], leadCompanies);
+      setResults(merged);
       setSource(data.source || "database");
     } catch (err: any) {
       setError(err.message);
